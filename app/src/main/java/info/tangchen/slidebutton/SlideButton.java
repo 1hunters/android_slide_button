@@ -62,7 +62,7 @@ public class SlideButton extends View implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 startX = motionEvent.getX();
                 break;
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE: //手指按下，滑动的过程
                 offsetX = motionEvent.getX() - startX;
                 if(offsetX > 0) {
                     offset = offsetX;
@@ -110,14 +110,14 @@ public class SlideButton extends View implements View.OnTouchListener {
         this.canvas = canvas;
         width = getWidth();
         height = getHeight();
-        offsetY = height / 8;
-        offsetX = width / 21;
+        offsetY = height / 8; //y轴留空距离
+        offsetX = width / 21; //x轴留空距离，我这里把宽度分割成了21份，在下面取2份为左右两边的留空距离
         paint();
     }
 
     private void paint() {
-        float r = (getHeight() - offsetY * 2) / 2;
-        maxOffsetX = getWidth() - 2 * (offsetX + r);
+        float r = (getHeight() - offsetY * 2) / 2; //圆形按钮的半径，即为整个view的高度减去上下两部分留空区域的一半
+        maxOffsetX = getWidth() - 2 * (offsetX + r); //圆形按钮圆心最远移动距离，即为整个控件的宽度减去 2 * 左右两侧留空 ＋ 2 * 半径
 
         printBackground();
         printTextContent();
@@ -149,15 +149,21 @@ public class SlideButton extends View implements View.OnTouchListener {
     }
 
     private int getTextAlpha() {
+        //描述文字半透明为 （当前移动距离：最远移动距离）* 255
         int base = (int) (255 - (255 * (offset >= maxOffsetX ? maxOffsetX : offset) / maxOffsetX));
-        return base <= 235 ? base + 20 : base;
+        return base <= 235 ? base + 20 : base; //若半透明度<235时候
     }
 
     private void printCircle(float r) {
         Paint paint = new Paint();
         paint.setColor(circleColor);
+
+        //给偏移量设置一个阈值，即不能超过圆形的最大移动距离，否则会出现圆形控件移出整个滑动部件空间的情况
         if(offset >= maxOffsetX)
             offset = maxOffsetX;
+
+        //cx：圆心x坐标，为r + x轴留空距离 + 移动的距离，cy：圆心y点坐标，为r＋y轴留空距离
+        //整个圆形的滑动过程即为圆形在x轴上的运动，因此只改变圆心的x坐标即可
         canvas.drawCircle(r + offsetX + offset, r + offsetY, r, paint);
     }
 }
