@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:background="#666666"
     tools:context="info.tangchen.slidebutton.MainActivity">
     <info.tangchen.slidebutton.SlideButton
         android:layout_width="match_parent"
         android:id="@+id/sd"
+        custom:bg="#000000"
+        custom:text="滑 动 解 锁"
         android:layout_height="60dp" />
 
 </android.support.constraint.ConstraintLayout>
